@@ -10,7 +10,6 @@ st.set_page_config(layout="wide")
 
 
 # SIDEBAR
-st.header("Custom tab component for on-hover navigation bar")
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
 
@@ -54,18 +53,31 @@ st.altair_chart(c, use_container_width=True)
 
 
 # Map GDL
-m = n = o = folium.Map(location=[20.6595, -103.3494], zoom_start = 12)
+
+gdl_location = [20.6595, -103.3494]
+
+m = n = o = folium.Map(location=gdl_location, zoom_start = 12)
 folium.Marker(
-    [20.6595, -103.3494],
-    popup="Liberty Bell",
-    tooltip="Liberty Bell"
+    gdl_location,
+    popup="Parque Agua Azul",
+    tooltip="Concha Acústica Agua Azul"
 ).add_to(m)
 
+# Map year 2010
+st.write("2010")
 st_data_map1 = st_folium(m, width = 725, key = 1)
+
+# Map year 2020
+st.write("2020")
 st_data_map2 = st_folium(n, width = 725, key = 2)
+
+#Map year 2030
+st.write("2030")
 st_data_map3 = st_folium(o, width = 725, key = 3)
 
-""" - Mapa con filtros de año 2010/2020/2030
+""" 
+- Mapa con filtros de año 2010/2020/2030
 - Los agebs estarán de colores diferentes según su cluster  
-- Sidebar con descripción de cada cluster (atributos ) y gráficas que indiquen estadística descriptiva sobre los datos de la misma base
- - Al dar click a un ageb surge un popup que da los datos del ageb (cluster al que pertenece, descripción del cluster, datos del AGEB) """
+- Sidebar con descripción de cada cluster ( atributos ) y gráficas que indiquen estadística descriptiva sobre los datos de la misma base
+- Al dar click a un ageb surge un popup que da los datos del ageb (cluster al que pertenece, descripción del cluster, datos del AGEB)
+"""
