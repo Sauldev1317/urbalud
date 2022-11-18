@@ -2,12 +2,13 @@ import pandas as pd # library for data analsysis
 import json # library to handle JSON files
 from geopy.geocoders import Nominatim # convert an address into latitude and longitude values
 import requests # library to handle requests
-import folium # map rendering library
 import numpy as np
+import folium # map rendering library
 import streamlit as st
 from streamlit_folium import folium_static
-from st_on_hover_tabs import on_hover_tabs
-st.set_page_config(layout="wide")
+
+
+
 
 def center():
     address = 'Surabaya, ID'
@@ -43,23 +44,14 @@ def show_maps(data, threshold_scale, data_all, data_geo):
     maps.geojson.add_child(folium.features.GeoJsonTooltip(fields=['name',data], aliases=['District: ', 'Areas Region(km squared)'], labels=True))                                                       
     folium_static(map_sby)
 
-# SIDEBAR
-st.markdown('<style>' + open('./styles/style.css').read() + '</style>', unsafe_allow_html=True)
-data_all = pd.read_csv('./resources/Surabaya_Full_of_Data.csv')
-data_geo = json.load(open('./resources/Kecamatan_Surabaya.geojson'))
-centers = center()
-map_sby = folium.Map(tiles='OpenStreetMap', location=[centers[0], centers[1]], zoom_start=12)
 
-with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Urbanlud', 'Urbanlud Demo'], 
-                         iconName=['dashboard', 'money'], default_choice=0)
-
-if tabs =='Urbanlud':
-    st.title('Urbalud')
-    st.write("Proyecto que nos ayuda a determinar si un lugar es optimo para un nuevo centro de salud")
-
-elif tabs == 'Urbanlud Demo':
+def urbaludDemoPage():
+    data_all = pd.read_csv('./resources/Surabaya_Full_of_Data.csv')
+    data_geo = json.load(open('./resources/Kecamatan_Surabaya.geojson'))
+    centers = center()
+    map_sby = folium.Map(tiles='OpenStreetMap', location=[centers[0], centers[1]], zoom_start=12)
     st.title('Map of Surabaya')
+
     data_all['District'] = data_all['District'].str.title()
     data_all = data_all.replace({'District':'Pabean Cantikan'},'Pabean Cantian')
     data_all = data_all.replace({'District':'Karangpilang'},'Karang Pilang')
@@ -70,7 +62,3 @@ elif tabs == 'Urbanlud Demo':
         data_geo['features'][idx]['properties']['Female_Pop'] = int(data_all['Female Population'][idx])
         data_geo['features'][idx]['properties']['Area_Region'] = float(data_all['Areas Region(km squared)'][idx])
     show_maps('Area_Region', threshold('Area_Region',data_all ), data_all, data_geo)
-
-
-
-
