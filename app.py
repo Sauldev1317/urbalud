@@ -12,7 +12,7 @@ image = Image.open('./resources/img/map.jpeg')
 st.set_page_config(layout="wide")
 
 # SIDEBAR
-st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
+st.markdown('<style>' + open('./resources/styles/styles.css').read() + '</style>', unsafe_allow_html=True)
 
 with st.sidebar:
     tabs = on_hover_tabs(tabName=['Demo', 'Money', 'Economy'], 
