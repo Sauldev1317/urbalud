@@ -6,78 +6,33 @@ import altair as alt
 import folium
 from st_on_hover_tabs import on_hover_tabs
 import streamlit as st
-st.set_page_config(layout="wide")
 
+from PIL import Image
+image = Image.open('./resources/img/map.jpeg')
+st.set_page_config(layout="wide")
 
 # SIDEBAR
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
-
 with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Dashboard', 'Money', 'Economy'], 
+    tabs = on_hover_tabs(tabName=['Demo', 'Money', 'Economy'], 
                          iconName=['dashboard', 'money', 'economy'], default_choice=0)
 
-if tabs =='Dashboard':
-    st.title("Navigation Bar")
-    st.write('Name of option is {}'.format(tabs))
+if tabs =='Demo':
+    st.title('Urbalud')
+    st.write("Proyecto que nos ayuda a determinar si un lugar es optimo para un nuevo centro de salud")
+    gdl_location = [20.6595, -103.3494]
+    m = n = o = folium.Map(location=gdl_location, zoom_start = 12)
+    folium.Marker(
+        gdl_location,
+        popup="Parque Agua Azul",
+        tooltip="Concha Acústica Agua Azul"
+    ).add_to(m)
 
-elif tabs == 'Money':
-    st.title("Paper")
-    st.write('Name of option is {}'.format(tabs))
-
-elif tabs == 'Economy':
-    st.title("Tom")
-    st.write('Name of option is {}'.format(tabs))
+    # Map year 2020
+    st.write("2020")
+    st.image(image, caption='Sunrise by the mountains')
     
 
-st.title('Urbalud')
-st.write("Proyecto que nos ayuda a determinar si un lugar es optimo para un nuevo centro de salud")
-st.write(pd.DataFrame({
-    'Ubicación': ['TLAJOMULCO', 'GUADALAJARA', 'ZAPOPAN', 'ZACATECAS'],
-    'Población': [10000, 20000, 30000, 40000],
-    'Centros medicos': [10, 20, 30, 40],
-    'Agua potable': [0, 0, 0, 1],
-    'Luz': [1, 1, 0, 1],
-    'wifi': [1, 1, 1, 1]
-}))
-
-# barChart
-df = pd.DataFrame(
-    np.random.randn(200, 3),
-    columns=['a', 'b', 'c'])
-
-c = alt.Chart(df).mark_circle().encode(
-    x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
-
-st.altair_chart(c, use_container_width=True)
 
 
-# Map GDL
-
-gdl_location = [20.6595, -103.3494]
-
-m = n = o = folium.Map(location=gdl_location, zoom_start = 12)
-folium.Marker(
-    gdl_location,
-    popup="Parque Agua Azul",
-    tooltip="Concha Acústica Agua Azul"
-).add_to(m)
-
-# Map year 2010
-st.write("2010")
-st_data_map1 = st_folium(m, width = 725, key = 1)
-
-# Map year 2020
-st.write("2020")
-st_data_map2 = st_folium(n, width = 725, key = 2)
-
-#Map year 2030
-st.write("2030")
-st_data_map3 = st_folium(o, width = 725, key = 3)
-
-""" 
-- Mapa con filtros de año 2010/2020/2030
-- Los agebs estarán de colores diferentes según su cluster  
-- Sidebar con descripción de cada cluster ( atributos ) y gráficas que indiquen estadística descriptiva sobre los datos de la misma base
-- Al dar click a un ageb surge un popup que da los datos del ageb (cluster al que pertenece, descripción del cluster, datos del AGEB)
-"""
