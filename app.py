@@ -15,8 +15,8 @@ st.set_page_config(layout="wide")
 st.markdown('<style>' + open('./resources/styles/styles.css').read() + '</style>', unsafe_allow_html=True)
 
 with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Demo', 'Money', 'Economy'], 
-                         iconName=['dashboard', 'money', 'economy'], default_choice=0)
+    tabs = on_hover_tabs(tabName=['Demo'], 
+                         iconName=['dashboard'], default_choice=0)
 
 if tabs =='Demo':
     st.title('Urbalud')
