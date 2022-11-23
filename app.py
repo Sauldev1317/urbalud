@@ -29,27 +29,23 @@ def show_maps(data, threshold_scale, data_all, data_geo):
     maps= folium.Choropleth(
         geo_data = data_geo,
         data = data_all,
-        columns=['District', 'Areas Region(km squared)'],
-        key_on='feature.properties.name',
-        threshold_scale=threshold_scale,
+        columns=['Cluster_Labels', 'total_hospitales'],
+        key_on='feature.properties.CVEGEO',
         fill_color='YlOrRd', 
         fill_opacity=0.7, 
         line_opacity=0.2,
-        legend_name= 'Areas Region(km squared)',
-        highlight=True,
-        reset=True).add_to(map_sby)
+    ).add_to(map_sby)
 
-    folium.LayerControl().add_to(map_sby)
-    maps.geojson.add_child(folium.features.GeoJsonTooltip(fields=['name',data], aliases=['District: ', 'Areas Region(km squared)'], labels=True))                                                       
+    folium.LayerControl().add_to(map_sby)                                             
     folium_static(map_sby)
 
 # SIDEBAR
 st.markdown('<style>' + open('./styles/style.css').read() + '</style>', unsafe_allow_html=True)
-data_all = pd.read_csv('./resources/Surabaya_Full_of_Data.csv')
-data_geo = json.load(open('./resources/Kecamatan_Surabaya.geojson'))
+data_all = pd.read_csv('./resources/urbanlud.csv')
+data_geo = json.load(open('./resources/AGEBS.geojson'))
 centers = center()
-map_sby = folium.Map(tiles='OpenStreetMap', location=[centers[0], centers[1]], zoom_start=12)
 
+""" PAGINA """
 with st.sidebar:
     tabs = on_hover_tabs(tabName=['Urbanlud', 'Urbanlud Demo'], 
                          iconName=['dashboard', 'money'], default_choice=0)
@@ -59,17 +55,19 @@ if tabs =='Urbanlud':
     st.write("Proyecto que nos ayuda a determinar si un lugar es optimo para un nuevo centro de salud")
 
 elif tabs == 'Urbanlud Demo':
-    st.title('Map of Surabaya')
-    data_all['District'] = data_all['District'].str.title()
-    data_all = data_all.replace({'District':'Pabean Cantikan'},'Pabean Cantian')
-    data_all = data_all.replace({'District':'Karangpilang'},'Karang Pilang')
+    st.title('Urbanlud Map')
+    m = folium.Map(tiles='OpenStreetMap', location=[20.838060, -103.602699, ], zoom_start=10)
+    folium.Choropleth(
+        geo_data = data_geo,
+        key_on='feature.properties.CVEGEO',
+        fill_color='YlOrRd', 
+        fill_opacity=0.7, 
+        line_opacity=0.2,
+    ).add_to(m)
 
-    for idx in range(31):
-        data_geo['features'][idx]['properties']['Total_Pop'] = int(data_all['Total Population'][idx])
-        data_geo['features'][idx]['properties']['Male_Pop'] = int(data_all['Male Population'][idx])
-        data_geo['features'][idx]['properties']['Female_Pop'] = int(data_all['Female Population'][idx])
-        data_geo['features'][idx]['properties']['Area_Region'] = float(data_all['Areas Region(km squared)'][idx])
-    show_maps('Area_Region', threshold('Area_Region',data_all ), data_all, data_geo)
+    folium.LayerControl().add_to(m)
+    folium_static(m)
+    
 
 
 
