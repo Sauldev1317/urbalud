@@ -29,7 +29,7 @@ def show_maps(data, threshold_scale, data_all, data_geo):
     maps= folium.Choropleth(
         geo_data = data_geo,
         data = data_all,
-        columns=['Cluster_Labels', 'total_hospitales'],
+        columns=['CVEGEO'],
         key_on='feature.properties.CVEGEO',
         fill_color='YlOrRd', 
         fill_opacity=0.7, 
@@ -41,33 +41,44 @@ def show_maps(data, threshold_scale, data_all, data_geo):
 
 # SIDEBAR
 st.markdown('<style>' + open('./styles/style.css').read() + '</style>', unsafe_allow_html=True)
-data_all = pd.read_csv('./resources/urbanlud.csv')
+data_2020 = pd.read_csv('./resources/urbanlud2020.csv')
+data_2030 = pd.read_csv('./resources/urbanlud2030.csv')
 data_geo = json.load(open('./resources/AGEBS.geojson'))
 centers = center()
 
-""" PAGINA """
 with st.sidebar:
-    tabs = on_hover_tabs(tabName=['Urbanlud', 'Urbanlud Demo'], 
-                         iconName=['dashboard', 'money'], default_choice=0)
+    tabs = on_hover_tabs(tabName=['Urbanlud Demo'], 
+                         iconName=['dashboard'], default_choice=0)
 
-if tabs =='Urbanlud':
-    st.title('Urbalud')
-    st.write("Proyecto que nos ayuda a determinar si un lugar es optimo para un nuevo centro de salud")
-
-elif tabs == 'Urbanlud Demo':
+if tabs == 'Urbanlud Demo':
     st.title('Urbanlud Map')
-    m = folium.Map(tiles='OpenStreetMap', location=[20.838060, -103.602699, ], zoom_start=10)
+
+    st.write('Mapa del año 2020')
+    mapa_2020 = folium.Map(tiles='OpenStreetMap', location=[20.838060, -103.602699, ], zoom_start=10,  width=700, height=400)
     folium.Choropleth(
         geo_data = data_geo,
+        data = data_2020,
+        columns=['CVEGEO', 'clusters'],
         key_on='feature.properties.CVEGEO',
-        fill_color='YlOrRd', 
+        fill_color='BuPu', 
         fill_opacity=0.7, 
-        line_opacity=0.2,
-    ).add_to(m)
-
-    folium.LayerControl().add_to(m)
-    folium_static(m)
+        line_opacity=0.2
+    ).add_to(mapa_2020)
+    folium.LayerControl().add_to(mapa_2020)
+    folium_static(mapa_2020)
     
+    mapa_2030 = folium.Map(tiles='OpenStreetMap', location=[20.838060, -103.602699, ], zoom_start=10,  width=700, height=400)
+    folium.Choropleth(
+        geo_data = data_geo,
+        data = data_2030,
+        columns=['CVEGEO', 'clusters'],
+        key_on='feature.properties.CVEGEO',
+        fill_color='BuPu', 
+        fill_opacity=0.7, 
+        line_opacity=0.2
+    ).add_to(mapa_2030)
+    folium.LayerControl().add_to(mapa_2030)
+    folium_static(mapa_2030)
 
 
 
