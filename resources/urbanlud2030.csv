@@ -1,4 +1,4 @@
-clusters,CVEGEO,total_hospitales_z,total_consultorios_z,total_medicos_z,total_enfermeros_z,total_practicantes_medicos_z,POBTOT_z,POBMAS_z,POBFEM_z,PSINDER_z,PDER_SS_z,VIVTOT_z,VPH_S_ELEC_z,VPH_AGUAFV_z,VPH_NODREN_z
+clusters,CVEGEO,total_hospitales,total_consultorios,total_medicos,total_enfermeros,total_practicantes_medicos,POBTOT,POBMAS,POBFEM,PSINDER,PDER_SS,VIVTOT,VPH_S_ELEC,VPH_AGUAFV,VPH_NODREN
 0,1400100010122,3,661,553,784.0,1638,17602.0,8368.0,9234.0,3538.0,14063.0,6649.0,6.0,6.0,6.0
 0,1400200010030,0,0,0,0.0,10,3536.0,1732.0,1804.0,636.0,2899.0,1190.0,1.0,1.0,1.0
 0,1400200020045,9,36,30,21.0,10,353.0,177.0,176.0,111.0,241.0,111.0,0.0,0.0,0.0
