@@ -11,7 +11,7 @@ st.markdown('<style>' + open('./styles/style.css').read() + '</style>', unsafe_a
 
 def loadData2020() :
     data_geo_2020 = json.load(open('./resources/AGEBS2020.geojson'))
-    data_2020 = pd.read_csv('./resources/urbanlud2020_sin_servicios.csv')
+    data_2020 = pd.read_csv('./resources/Datos_2020_con3_clusters.csv')
     for idx, data in enumerate(data_geo_2020['features']):
         CVEGEO = data['properties']['CVEGEO']
         dataframeRow = data_2020[data_2020['CVEGEO'] == CVEGEO]
@@ -82,7 +82,7 @@ def loadData2020() :
         
 def loadData2030() : 
     data_geo_2030 = json.load(open('./resources/AGEBS2030.geojson'))
-    data_2030 = pd.read_csv('./resources/urbanlud2030_sin_servios.csv')
+    data_2030 = pd.read_csv('./resources/Datos_2020_con3_clusters.csv')
     for idx, data in enumerate(data_geo_2030['features']):
         CVEGEO = data['properties']['CVEGEO']
         dataframeRowX = data_2030[data_2030['CVEGEO'] == CVEGEO]
@@ -154,32 +154,31 @@ def loadData2030() :
     mapsX.geojson.add_child(tooltip)   
     folium_static(mapa_2030)
 
-st.title('Urbanlud')
+st.title('Urbalud')
 with st.container():
-    col1, col2 = st.columns([5, 7])
-    with col1:
-        option = st.selectbox(
-        'Selecciona un mapa',
-        ('Mapa 2020', 'Mapa 2030'))
-        if option == 'Mapa 2020' :
-            loadData2020()
+    option = st.selectbox(
+    'Selecciona un mapa',
+    ('Mapa 2020', 'Mapa 2030'))
+    if option == 'Mapa 2020' :
+        loadData2020()
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image("./resources/2020_cluster1.jpg")
+        with col2:
+            st.image("./resources/2020_cluster2.jpg")
+        with col3:
+            st.image("./resources/2020_cluster3.jpg")
+    elif option == 'Mapa 2030' :
+        loadData2030()
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image("./resources/2030_cluster1.jpg")
+        with col2:
+            st.image("./resources/2030_cluster2.jpg")
+        with col3:
+            st.image("./resources/2030_cluster3.jpg")
 
-        elif option == 'Mapa 2030' :
-            loadData2030()
 
-    with col2:
-        chart_data = pd.DataFrame(
-        np.random.randn(200, 3),
-        columns=['a', 'b', 'c'])
-        st.vega_lite_chart(chart_data, {
-            'mark': {'type': 'circle', 'tooltip': True},
-            'encoding': {
-                'x': {'field': 'a', 'type': 'quantitative'},
-                'y': {'field': 'b', 'type': 'quantitative'},
-                'size': {'field': 'c', 'type': 'quantitative'},
-                'color': {'field': 'c', 'type': 'quantitative'},
-            },
-        })
 
 
 
