@@ -8,6 +8,8 @@ import streamlit as st
 from streamlit_folium import folium_static
 st.set_page_config(layout="wide")
 st.markdown('<style>' + open('./styles/style.css').read() + '</style>', unsafe_allow_html=True)
+datos_2020 = pd.read_csv('./resources/datos_2020.csv')
+datos_2030 = pd.read_csv('./resources/datos_2030.csv')
 
 def loadData2020() :
     data_geo_2020 = json.load(open('./resources/AGEBS2020.geojson'))
@@ -154,7 +156,15 @@ def loadData2030() :
     mapsX.geojson.add_child(tooltip)   
     folium_static(mapa_2030)
 
-st.title('Urbalud')
+col1, col2 = st.columns([1, 11])
+with col1:
+   st.image("./resources/logo.png")
+
+with col2:
+   st.title('Urbalud')
+
+
+
 with st.container():
     option = st.selectbox(
     'Selecciona un mapa',
@@ -177,8 +187,34 @@ with st.container():
             st.image("./resources/2030_cluster2.jpg")
         with col3:
             st.image("./resources/2030_cluster3.jpg")
-
-
-
+columnsOptions = st.selectbox(
+    'Selecciona los datos que quieres comparar entre años',
+    (
+        'Centros medicos', 
+        'Personal medico', 
+        'Población',
+        'Viviendas y servicios',
+    ))
+result = pd.merge(datos_2020, datos_2030, on='CVEGEO', how='outer')
+if columnsOptions == 'Centros medicos': 
+    st.dataframe(
+        data = result.loc[:,['CVEGEO', 'clusters_2020', 'clusters_2030', 'total_hospitales_2020', 'total_hospitales_2030', 'total_consultorios_2020', 'total_consultorios_2030']], 
+        height=500
+    )
+elif columnsOptions == 'Personal medico': 
+    st.dataframe(
+        data = result.loc[:,['CVEGEO', 'clusters_2020', 'clusters_2030', 'total_medicos_2020', 'total_medicos_2030', 'total_enfermeros_2020', 'total_enfermeros_2030', 'total_practicantes_medicos_2020', 'total_practicantes_medicos_2030']], 
+        height=500
+    )
+elif columnsOptions == 'Población': 
+    st.dataframe(
+        data = result.loc[:,['CVEGEO', 'clusters_2020', 'clusters_2030', 'POBTOT_2020', 'POBTOT_2030', 'POBMAS_2020', 'POBMAS_2030', 'POBFEM_2020', 'POBFEM_2030', 'PSINDER_2020', 'PSINDER_2030']], 
+        height=500
+    )
+elif columnsOptions == 'Viviendas y servicios': 
+    st.dataframe(
+        data = result.loc[:,['CVEGEO', 'clusters_2020', 'clusters_2030', 'VIVTOT_2020', 'VIVTOT_2030', 'VPH_S_ELEC_2020', 'VPH_S_ELEC_2030', 'VPH_AGUAFV_2020', 'VPH_AGUAFV_2030', 'VPH_NODREN_2020', 'VPH_NODREN_2030']], 
+        height=500
+    )
 
 
